@@ -1,0 +1,56 @@
+<div>
+    <label for="numberOfQuestions">Number of Questions:</label>
+    <select id="numberOfQuestions" [(ngModel)]="numberOfQuestions">
+      <option *ngFor="let num of questionOptions" [value]="num">{{ num }}</option>
+    </select>
+  </div>
+  
+  <div>
+    <label for="subjectType">Subject Type:</label>
+    <select id="subjectType" [(ngModel)]="subjectType" (change)="onSubjectTypeChange()">
+      <option *ngFor="let type of subjectTypes" [value]="type">{{ type }}</option>
+    </select>
+  </div>
+  
+  <div *ngIf="subjectType === 'Other'">
+    <label for="customSubject">Custom Subject:</label>
+    <input id="customSubject" [(ngModel)]="customSubject" required />
+  </div>
+  
+  <div>
+    <button (click)="generateMCQ()">Generate MCQs</button>
+  </div>
+  
+  <hr>
+  
+  <div *ngIf="showResults"> 
+    <h3>Generated MCQs:</h3>
+    <form (ngSubmit)="submitAnswer()">
+      <div *ngFor="let mcq of generatedMCQs; let i = index">
+        <h4>Question {{ i + 1 }}:</h4>
+        <p><strong>{{ mcq.question }}</strong></p>
+        <div *ngFor="let option of mcq.options">
+          <input 
+            type="radio" 
+            [id]="option + i" 
+            name="question{{i}}" 
+            [value]="option" 
+            [(ngModel)]="selectedAnswers[i]">
+          <label [for]="option + i">{{ option }}</label>
+        </div>
+        <hr>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <div *ngIf="submitted">
+      <h3>Answers:</h3>
+      <div *ngFor="let mcq of generatedMCQs; let i = index">
+        <h4>Question {{ i + 1 }}:</h4>
+        <p><strong>Selected Answer:</strong> {{ selectedAnswers[i] }}</p>
+        <p *ngIf="selectedAnswers[i] === mcq.answer"><strong>Correct!</strong></p>
+        <p *ngIf="selectedAnswers[i] !== mcq.answer && selectedAnswers[i] !== undefined"><strong>Incorrect. The correct answer is:</strong> {{ mcq.answer }}</p>
+        <hr>
+      </div>
+    </div>
+  </div>
+  
