@@ -29,18 +29,17 @@ export class GeminiService {
     };
 
     try {
+      if (!prompt) {
+        throw new Error('Prompt is required.');
+      }
       const response = await this.http.post<any>(this.apiUrl, requestBody).toPromise();
       // console.log('Response:', response);
-      return this.parseMCQResponse(response);
+      return response
     } catch (error) {
       console.error('Error generating MCQ:', error);
       throw error;
     }
   }
-
-parseMCQResponse(response: any): any {
-  return response;
-}
 
   
 }

@@ -22,21 +22,20 @@
   </div>
   
   <hr>
-  
   <div *ngIf="showResults"> 
     <h3>Generated MCQs:</h3>
     <form (ngSubmit)="submitAnswer()">
       <div *ngFor="let mcq of generatedMCQs; let i = index">
         <h4>Question {{ i + 1 }}:</h4>
-        <p><strong>{{ mcq.question }}</strong></p>
-        <div *ngFor="let option of mcq.options">
+        <p><strong>{{ mcq.Question }}</strong></p>
+        <div *ngFor="let optionKey of getOptionKeys(mcq.Options)">
           <input 
             type="radio" 
-            [id]="option + i" 
+            [id]="optionKey + i" 
             name="question{{i}}" 
-            [value]="option" 
+            [value]="optionKey" 
             [(ngModel)]="selectedAnswers[i]">
-          <label [for]="option + i">{{ option }}</label>
+          <label [for]="optionKey + i">{{ mcq.Options[optionKey] }}</label>
         </div>
         <hr>
       </div>
@@ -47,8 +46,8 @@
       <div *ngFor="let mcq of generatedMCQs; let i = index">
         <h4>Question {{ i + 1 }}:</h4>
         <p><strong>Selected Answer:</strong> {{ selectedAnswers[i] }}</p>
-        <p *ngIf="selectedAnswers[i] === mcq.answer"><strong>Correct!</strong></p>
-        <p *ngIf="selectedAnswers[i] !== mcq.answer && selectedAnswers[i] !== undefined"><strong>Incorrect. The correct answer is:</strong> {{ mcq.answer }}</p>
+        <p *ngIf="selectedAnswers[i] === mcq.Answer"><strong>Correct!</strong></p>
+        <p *ngIf="selectedAnswers[i] !== mcq.Answer && selectedAnswers[i] !== undefined"><strong>Incorrect. The correct answer is:</strong> {{ mcq.Options[mcq.Answer] }}</p>
         <hr>
       </div>
     </div>
